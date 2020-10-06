@@ -1,0 +1,116 @@
+<div class="main" style="background: rgba(255,253,208,0.25);">
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Blog Entries Column -->
+            <div class="col-md-12">
+                <h3 class="my-4">MY RECIPES
+                </h3>
+                <!-- Blog Post -->
+                <div class="editcards" id="parentCard">
+                    {{#each results.recipies}}
+                    <div class="card mb-3" style="max-width: 540px; height:fit-content;">
+                        <div class="row no-gutters">
+                            <div class="col-md-4" style="height:250px;">
+                                <img src="data:image/jpeg;base64, {{this.recipieImage}}" class="card-img" alt="..."
+                                    style="width:100%; height:100%; object-fit:cover">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body" style="overflow:hidden">
+                                    <h5 class="card-title" style="font-weight: 600;">{{this.recipie}}</h5>
+                                    <p class="card-text" style="margin:0;">{{this.description}}</p>
+                                    <p class="card-text"><small class="text-muted">Posted on
+                                            {{this.timestamp.[0]}}</small></p>
+                                    <a class="btn btn-warning btn-sm edit" data-toggle="modal" data-recipe-id="{{this._id}}"
+                                        data-target="#staticBackdrop">Edit</a>
+                                    <a href="/recipie?id={{this._id}}" class="btn btn-info btn-sm">View</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+
+        </div>
+        <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false"
+                            tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="text-align:center; color:rgba(50, 35, 45)">
+                                        <h5 class="modal-title" id="staticBackdropLabel">Select
+                                            the section of the recipe to
+                                            be updated</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul>
+                                            <li><a class="recipeName">Recipe Name</a></li>
+                                            <li><a class="description">Description</a></li>
+                                            <li><a class="ingredients">Ingredients</a></li>
+                                            <li><a class="category">Category</a></li>
+                                            <li><a class="procedure">Procedure</a></li>
+                                            <li><a class="recipeImage">Recipe Image</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+        <!-- /.row -->
+        {{#if results.recipies}}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                {{!-- if previous page exists dont disable the previous button --}}
+                <li class="page-item {{#unless results.previous}}disabled{{/unless}} prevpager">
+                    <a class="page-link" href="/myrecipes?page={{results.previous.prev}}" tabindex="-1"
+                        aria-disabled="true" style="color:#ff0081; border:0"><i class="fa fa-chevron-circle-left"
+                            aria-hidden="true"></i></a>
+                </li>
+                <div class="editpageActive" style="display: none; pointer-events:none">{{results.page}}
+                </div>
+                {{#each results.totalpage}}
+                {{#notequal ../results.totalpage.length "1"}}
+                <li class="page-item page{{this}}"><a class="page-link" href="/myrecipes?page={{this}}"
+                        style="color:#ff0081; border:0; font-weight:500">{{this}}</a></li>
+                {{/notequal}}
+                {{/each}}
+                <li class="page-item {{#unless results.next}}disabled{{/unless}} nextpager">
+                    <a class="page-link" href="/myrecipes?page={{results.next.next}}"
+                        style="color:#ff0081; border:0 "><i class="fa fa-chevron-circle-right"
+                            aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </nav>
+        {{/if}}
+
+    </div>
+    <!-- /.container -->
+
+</div>
+
+<script>
+    //edit button
+    var parentEle = document.getElementById("parentCard");
+
+    //event
+    parentEle.addEventListener("click", function(e){
+        if(e.target.classList.contains("edit")){
+            var id = e.target.getAttribute("data-recipe-id");
+            document.querySelector(".recipeName").setAttribute("href", `/edit?id=${id}&section=recipie`);
+            document.querySelector(".description").setAttribute("href", `/edit?id=${id}&section=description`)
+            document.querySelector(".ingredients").setAttribute("href", `/edit?id=${id}&section=ingredients`);
+            document.querySelector(".category").setAttribute("href", `/edit?id=${id}&section=category`);
+            document.querySelector(".procedure").setAttribute("href", `/edit?id=${id}&section=procedure`);
+            document.querySelector(".recipeImage").setAttribute("href", `/edit?id=${id}&section=recipieImage`);
+        }
+    })
+
+        //get the value of current page;
+    var editcurrentpage = document.querySelector(".editpageActive").textContent;
+    document.querySelector(`.page${editcurrentpage}`).classList.toggle("mynavactive");
+
+</script>

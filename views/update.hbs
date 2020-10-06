@@ -1,0 +1,36 @@
+<div class="main">
+    <div class="container updatecontainer">
+        <div class="row" style="height: calc(100vh - 112px);">
+            <div class="col-md-8 offset-md-2">
+                <div class="updatebox">
+                    <form action="/edit?id={{id}}&section={{section}}" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="section" >Update the
+                                <span>{{#notequal section "recipieImage"}}{{section}}{{/notequal}}{{#equal section "recipieImage"}}recipe
+                                    image{{/equal}}</span></label><span>{{#equal section "description"}}<small> (Not
+                                    greater than 200 characters)</small>{{/equal}}{{#equal section "ingredients"}}<small> (Use comma to separate the ingredients)</small>{{/equal}}</span>
+                            {{#notequal section "recipieImage"}}
+                            {{#notequal section "category"}}
+                            <textarea class="form-control" id="section" {{#equal section "recipie"}}rows="1"
+                                {{/equal}}{{#equal section "procedure"}}rows="10"
+                                {{/equal}}rows="3" name="{{section}}">{{recipeSection}}</textarea>
+
+                            {{/notequal}}
+                            {{/notequal}}
+                            {{#equal section "category"}}
+                            <select class="custom-select custom-select-sm" name="{{section}}">
+                                <option value="veg">Veg</option>
+                                <option value="non-veg">Non-Veg</option>
+                            </select>
+                            {{/equal}}
+                            {{#equal section "recipieImage"}}
+                            <input type="file" accept="image/*" class="btn" name="{{section}}">
+                            {{/equal}}
+                        </div>
+                        <button type="submit" class="btn btn-success btn-sm">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

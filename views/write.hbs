@@ -1,0 +1,64 @@
+<div class="main">
+    <section>
+        <div class="content">
+            <h2>Have a wonderful recipie?</h2> 
+            <strong>Don't wait. Go write, right now</strong>
+        </div>
+    </section>
+    <br><br>
+    <div class="row mx-0">
+        <div class="col-md-6 offset-md-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">Upload Recipie</li>
+                </ol>
+            </nav>
+            <form action="/write" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="formGroupExampleInput">Recipie name</label>
+                    <input type="text" class="form-control myInput" id="formGroupExampleInput" name="recipie" placeholder="Enter recipie name" {{#if recipe}}value="{{recipe.recipie}}"{{/if}}>
+                    {{#if body.recipieNameValidationError}}<small class="text-danger">{{body.recipieNameValidationError}}</small>{{/if}}
+                </div>
+                <div class="form-group">
+                    <label for="formGroupExampleInput2">Description</label>
+                    <input type="text" class="form-control myInput" id="formGroupExampleInput2" name="description" placeholder="Enter recipie description" {{#if recipe}}value="{{recipe.description}}"{{/if}}>
+                    {{#if body.descriptionValidationError}}<small class="text-danger">{{body.descriptionValidationError}}</small>{{/if}}
+                    <small class="form-text">Not greater than 200 characters.</small>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="inputPassword4">Ingredients</label>
+                        <input type="text" class="form-control myInput" id="inputPassword4" name="ingredients" {{#if recipe}}value="{{recipe.ingredients.[1]}}"{{/if}}>
+                        {{#if body.keywordValidationError}}<small class="text-danger">{{body.keywordValidationError}}</small>{{/if}}
+                        <small>Use comma to separate the ingredients...</small>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="inputState">Category</label>
+                            <select id="inputState" class="form-control myInput" name="category" {{#if recipe}}value="{{recipe.category}}"{{/if}}>
+                                <option style="color:#4B0082" value="veg">Veg</option>
+                                <option style="color:#4B0082" value="non-veg">Non-Veg</option>
+                            </select>
+                            {{#if body.categoryValidationError}}<small class="text-danger">{{body.categoryValidationError}}</small>{{/if}}
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="validationTextarea">Procedure</label>
+                    <textarea class="form-control myInput" id="validationTextarea" name="procedure" placeholder="Procedure to make the recipie..." >{{#if recipe}}{{recipe.procedure.[1]}}{{/if}}</textarea>
+                    {{#if body.procedureValidationError}}<small class="text-danger">{{body.procedureValidationError}}</small>{{/if}}
+                </div>
+                <div class="input-group mb-3">
+                    <div>
+                        <label for="myImage">Upload image</label>
+                        <input type="file" id="myImage" name="myImage" accept="image/*" style="width:100%" class="fileUpload">
+                        {{#if body.fileError}}<small class="text-danger">{{body.fileError}}</small>{{/if}}
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-success rounded-pill" type="submit">Submit</button>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+    <br><br>
+</div>

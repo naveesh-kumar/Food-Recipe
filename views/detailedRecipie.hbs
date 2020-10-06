@@ -1,0 +1,213 @@
+  <div class="main" >
+  <!-- Page Content -->
+  <div class="container">
+    <div class="row " id="main-content">
+      <!-- Post Content Column -->
+      <div class="col-lg-8">
+        <!-- Title -->
+        <h1 class="mt-4">{{recipie.recipie}} <span class="badge badge-secondary">{{recipie.category}}</span></h1>
+        <!-- Author -->
+        <p class="lead">
+          by
+          <a onclick="toggle()" class="text-capitalize text-decoration-none" style="color:#df0844; font-weight:600">{{recipie.uploadedBy}}</a>
+        </p>
+        {{#if recipie.avgrating}}
+        <div class="displayRating">
+          <div style="display:none; pointer-events:none" class="recipieRatings" >{{recipie.avgrating}}</div>
+          <div class="star-outer">
+            <div class="star-inner">
+            </div>
+          </div>
+          <span style="font-weight: 500;">({{recipie.avgrating}}/5)</span>
+        </div>
+        {{/if}}
+        <hr>
+        <!-- Date/Time -->
+        <p>Posted on {{recipie.timestamp.[1]}}</p>
+        <hr>
+        <!-- Preview Image -->
+        <img class="img-fluid rounded img-responsive" src="data:image/jpeg;base64, {{recipie.recipieImage}}" alt="">
+        <hr>
+        <!-- Post Content -->
+        <h2 class="mt-2 mb-2">How to Make {{recipie.recipie}}?</h2>
+        <ol>
+          {{#each recipie.procedure.[0]}}
+            <li class="lead">{{this}}</li>
+          {{/each}}
+        </ol>
+        <strong>If you've made this recipe, leave us a comment down below to let us know how you liked it!</strong>
+        <hr>
+        <!-- Rating -->
+        <h6>How would you rate your experience?</h6>
+        <div class="rating" tabindex="1" onblur="calculateRating(this)" style="outline:none">
+          <i class="fa fa-star-o" aria-hidden="true" value="1" onclick="clickStar(this)"></i>
+          <i class="fa fa-star-o" aria-hidden="true" value="2" onclick="clickStar(this)"></i>
+          <i class="fa fa-star-o" aria-hidden="true" value="3" onclick="clickStar(this)"></i>
+          <i class="fa fa-star-o" aria-hidden="true" value="4" onclick="clickStar(this)"></i>
+          <i class="fa fa-star-o" aria-hidden="true" value="5" onclick="clickStar(this)"></i>
+        </div>
+        <div class="rating-display"></div>
+        <div style="display:none; pointer-events:none" class="ratingcount"></div>
+        <div style="display:none; pointer-events:none" class="recipieId">{{recipie._id}}</div>
+        <!-- Comments Form -->
+        <div class="card my-4">
+          <h5 class="card-header">Leave a Comment:</h5>
+          <div class="card-body">
+            <form action="/recipie?id={{recipie._id}}" method="POST">
+              <div class="form-group">
+                <textarea class="form-control" rows="3" name="comment"></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+        {{!-- {{#if recipe.recipieComment}} --}}
+        {{#each recipie.recipieComment}}
+        <!-- Single Comment -->
+        <div class="media mb-4">
+          <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+          <div class="media-body">
+            <h5 class="mt-0 text-capitalize">{{this.commentedBy}} <span class="pull-right" style="font-size:16px">{{this.commentedAt}}</span></h5>
+            {{this.commentBody}}
+          </div>
+        </div>
+         {{/each}}
+        {{!-- {{/if}} --}}
+      </div>
+     
+      <!-- Sidebar Widgets Column -->
+      <div class="col-md-4">
+
+        <!-- Categories Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Ingredients</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-lg-10">
+                <ul class="list-unstyled mb-0">
+                  {{#each recipie.ingredients.[0]}}
+                  <li>
+                    <a href="http://google.com/search?q={{this}}" target="blank" class="text-capitalize text-decoration-none">{{this}}</a>
+                  </li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Side Widget -->
+        <div class="card my-4">
+          <h5 class="card-header">Description</h5>
+          <div class="card-body">
+            {{recipie.description}}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+    {{!-- row --}}
+    <div class="row popup" id="sub-content">
+      <h5 class="popupHead">More recipes by {{recipie.uploadedBy}}</h5>
+      <a class="close" onclick="toggle()"><i class="fa fa-times" aria-hidden="true"></i></a>
+      <div class="col-md-12">
+        {{#each recipies}}
+        <h4>{{this.recipie}}</h3>
+        <p>{{this.description}}</p>
+        <a href="/recipie?id={{this._id}}">Read <i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+        <hr>
+        {{/each}}
+
+      </div>
+    </div>
+
+  </div>
+  <!-- /.container -->
+</div>
+
+<script>
+var mainele = document.querySelector("#main-content");
+var subele = document.querySelector("#sub-content");
+var rating = document.querySelector(".rating");
+var ratingDisplayEle = document.querySelector(".rating-display");
+var ratingele = document.querySelector(".ratingcount");
+var recipieIdEle = document.querySelector(".recipieId");
+var ratingtoshowele = document.querySelector(".recipieRatings");
+
+//add event listener
+function clickStar(ele){
+  var clickedStar = ele;
+  //value of the star
+  var ratingValue = parseInt(clickedStar.getAttribute("value"));
+  //change the color of the star
+  for(var i=0; i<ratingValue; i++){
+    rating.children[i].classList.add("clicked");
+    for(var j=ratingValue; j<=4; j++){
+      if(rating.children[j].classList.contains("clicked")){
+        rating.children[j].classList.remove("clicked");
+      }
+    }
+  }
+}
+
+//function to calculate rating
+function calculateRating(ele){
+  //check how many elements are having clicked class
+  var ratingCount = 0;
+  for(var i=0; i<ele.children.length; i++){
+    if(ele.children[i].classList.contains("clicked")){
+      ratingCount++;
+    }
+  }
+  ratingDisplayEle.textContent = `You have selected ${ratingCount} rating out of 5`;
+  ratingele.textContent = ratingCount;
+
+  setTimeout(()=>{
+    swal({
+    title:"Would you like to submit the rating?",
+    icon:"warning",
+    buttons:["No","Yes"]
+  }).then((confirm)=>{
+     if(confirm){
+       fetch(`/recipie/rating?id=${recipieIdEle.textContent}`, {
+         method:"POST",
+         redirect: "follow",
+         headers:{
+           'Content-Type':"application/json"
+         },
+         body:JSON.stringify({rating:ratingele.textContent})
+       }).then((value)=>{
+         console.log(value.url);
+         if(value.url == `http://localhost:3000/recipie?id=${recipieIdEle.textContent}&loginerror=true`){
+           swal("Please register or login", {icon:"warning"});
+       }else if(value.url == `http://localhost:3000/recipie?id=${recipieIdEle.textContent}`){
+            swal("Rating successfully submitted", {icon:"success"}).then((confirm)=>{
+              if(confirm){
+                location.href = `http://localhost:3000/recipie?id=${recipieIdEle.textContent}`;
+              }
+            })
+       }
+       })
+     }
+  })
+  },3000);
+}
+
+function toggle(){
+  mainele.classList.toggle("containeractive");
+  subele.classList.toggle("containeractive");
+}
+
+//add event listener
+document.addEventListener("DOMContentLoaded", function(){
+  var ratingnum = parseFloat(ratingtoshowele.textContent);
+  //rating percentage
+  var ratingPercentage = (ratingnum/5) * 100;
+  //round the rating to nearest 10 and assign to width of inner star
+  document.querySelector(".star-inner").style.width = `${Math.round((ratingPercentage*10)/10)}%`;
+})
+
+
+</script>

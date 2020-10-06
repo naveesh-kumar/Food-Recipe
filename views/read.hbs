@@ -1,0 +1,138 @@
+<div class="main" >
+	<section>
+		<div class="content">
+			<h2>Thinking of what to cook?</h2>
+			<p>Find the best recipies at one click</p>
+			<form class="bannerInput" action="/read" method="GET">
+				<input type="text" autocomplete="off" spellcheck="false" name="recipe">
+				<button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+			</form>
+		</div>
+	</section>
+	<br>
+	<nav class="nav mynav">
+		<span class="pull-left nav-link menu" onclick="navigation()"><i class="fa fa-bars" aria-hidden="true"></i> {{#if results.filter}} <span style="font-size:5px; position:absolute"><i class="fa fa-circle" aria-hidden="true"></i>
+</span>{{/if}}</span>
+		<a class="nav-link allrecipies {{#if allrecipies}}mynavactive{{/if}}" href="/read">All Recipes</a>
+		<a class="nav-link vegrecipies {{#equal category "veg"}}mynavactive{{/equal}}" href="/read/veg">Veg</a>
+		<a class="nav-link nonvegrecipies {{#equal category "non-veg"}}mynavactive{{/equal}}" href="/read/non-veg">Non-Veg</a>
+	</nav>
+	<br>
+	<div class="container main-container ">
+		<div class="row">
+			<div class="col-md-2 sidebar">
+				<div class="sd-head">Sort By</div>
+				<hr>
+				<div class="sd-item sd-item-user">
+					<a class="sd-link-user"><i class="fa fa-user" aria-hidden="true"></i> Users</a>
+					<ul class="sd-menu-user">
+						<span class="notification" style="display:none; visibility:hidden">{{results.filter}}</span>
+						<li>
+							<a href="/read?alluser=true" class="userdetails">All Users</a>
+						</li>
+						{{#each results.users}}
+						<li>
+							<a href="/read?user={{this.username}}" class="userdetails">{{this.username}}</a><span class="light"><i style="color:white;" class="fa fa-circle" aria-hidden="true"></i></span>
+						</li>
+						{{/each}}
+					</ul>
+				</div>
+				<div class="sd-item">
+					<a href="/read?sort=rating" class="sd-link-rating"><i class="fa fa-star" aria-hidden="true"></i> Ratings</a>
+				</div>
+				<div class="sd-item">
+					<a href="/read?sort=recent" class="sd-link-rating"><i class="fa fa-clock-o" aria-hidden="true"></i> Most Recent</a>
+				</div>
+			</div>
+			<div class="col-md-12 sub-main">
+				<div class="myCardgroup">
+					{{#each results.recipies}}
+					<div class="mycard">
+						<div class="post-image">
+							<img src="data:image/jpeg;base64, {{this.recipieImage}}" alt="" class="img-responsive">
+						</div>
+						<div class="news-content">
+							<span class="category" {{#equal this.category "non-veg"}}style="background:#DC143C"{{/equal}}{{#equal this.category "veg"}}style="background:yellowgreen"{{/equal}}>{{this.category}}</span>
+							{{#if this.avgrating}}
+							<span class="recipie-rating"><i class="fa fa-star" aria-hidden="true"></i>{{this.avgrating}}</span>
+							{{/if}}
+								<div class="post-meta">
+									<span class="author">
+										<a href="#"><i class="fa fa-user" aria-hidden="true"></i> {{this.uploadedBy}}</a>
+									</span>
+									<span class="time pull-right">
+										<a href="#"><i class="fa fa-clock-o" aria-hidden="true"></i> {{this.timestamp.[0]}}</a>
+									</span>
+									<div class="clearfix"></div>
+								</div>
+								<h3 class="post-header">{{this.recipie}}</h3>
+								<p>{{this.description}}</p>
+								<a href="/recipie?id={{this._id}}" class="readMore">Read more <i class="fa fa-angle-double-right"
+							aria-hidden="true"></i></a>
+						</div>
+					</div>
+			{{/each}}
+				</div>
+			</div>
+		</div>
+
+		{{#if results.recipies}}
+		<nav aria-label="Page navigation example">
+			<ul class="pagination justify-content-center">
+				{{!-- if previous page exists dont disable the previous button --}}
+				<li class="page-item {{#unless results.previous}}disabled{{/unless}} prevpager">
+					<a class="page-link" href="/read{{#if category}}/{{category}}{{/if}}?page={{results.previous.prev}}" tabindex="-1" aria-disabled="true" style="color:#ff0081; border:0"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i></a>
+				</li>
+				<div class="pageActive" style="display: none; pointer-events:none">{{results.page}}</div>
+				{{#each results.totalpage}}
+				{{#notequal ../results.totalpage.length "1"}}
+				<li class="page-item page{{this}}"><a class="page-link" href="/read{{#if ../results.category}}/{{../results.category}}{{/if}}?page={{this}}" style="color:#ff0081; border:0; font-weight:500">{{this}}</a></li>
+				{{/notequal}}
+				{{/each}}
+				<li class="page-item {{#unless results.next}}disabled{{/unless}} nextpager">
+					<a class="page-link" href="/read{{#if category}}/{{category}}{{/if}}?page={{results.next.next}}" style="color:#ff0081; border:0 "><i class="fa fa-chevron-circle-right" aria-hidden="true"></i></a>
+				</li>
+			</ul>
+		</nav>
+		{{/if}}
+	</div>
+</div>
+
+<script>
+	//get the value of current page;
+	var currentpage = document.querySelector(".pageActive").textContent;
+	document.querySelector(`.page${currentpage}`).classList.toggle("mynavactive");
+
+	//navigation
+	function navigation(){
+		var sidebar = document.querySelector(".sidebar");
+		var main = document.querySelector(".main-container");
+		var submain = document.querySelector(".sub-main");
+		sidebar.classList.toggle("navactive");
+		main.classList.toggle("navactive");
+		submain.classList.toggle("navactive");
+		if(main.classList.contains("navactive")){
+			main.classList.remove("container");
+			main.classList.add("container-fluid");
+		}else{
+			main.classList.add("container");
+			main.classList.remove("container-fluid");
+		}
+		if(submain.classList.contains("navactive")){
+			submain.classList.remove("col-md-12");
+			submain.classList.add("col-md-10");
+		}else{
+			submain.classList.add("col-md-12");
+			submain.classList.remove("col-md-10");
+		}
+		//notification
+		var userdetailsele = document.querySelectorAll(".userdetails");
+		var notificationele = document.querySelector(".notification");
+		userdetailsele.forEach((item)=>{
+			if(item.textContent == notificationele.textContent)
+				item.nextSibling.style.opacity = 1;
+		})
+	}
+
+
+</script>

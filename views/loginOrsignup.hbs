@@ -1,0 +1,46 @@
+<div style="background: rgba(255,253,208,0.25);">
+
+    <div class="container">
+        <div class="row" style="height:calc(100vh - 112px)">
+            <div class="col-md-4 offset-md-4 my-auto rounded form-outline">
+                <div class="md-4 pt-2 w-100 text-center">
+                    <h3 class="text-uppercase title">{{title}}</h3>
+                </div>
+                <form autocomplete="off" {{#if signup}}action="/signup" {{/if}} {{#if login}}action="/login"
+                    {{/if}}method="POST">
+                    {{#if signup}}
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" name="username" id="username" placeholder="Enter username"
+                            class="form-control myInput" spellcheck="false" {{body.username}}>
+                        {{#if body.usernameValidationError}}
+                        <p class="text-danger">{{body.usernameValidationError}}</p>
+                        {{/if}}
+                    </div>
+                    {{/if}}
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" name="email" id="email" placeholder="Enter email"
+                            class="form-control myInput" spellcheck="false" value={{body.email}}>
+                        {{#if body.emailValidationError}}
+                        <p class="text-danger">{{body.emailValidationError}}</p>
+                        {{/if}}
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" name="password" id="password" placeholder="Enter password"
+                            class="form-control myInput" aria-describedby="help" spellcheck="false"
+                            value={{body.password}}>
+                        {{#if body.passwordValidationError}}
+                        <p class="text-danger">{{body.passwordValidationError}}</p>
+                        {{/if}}
+                        <small id="help" class="form-text">Your details will be safe with us...</small>
+                    </div>
+                    <div class="form-group pb-2 w-100 text-center">
+                        <button type="submit" class="btn btn-success rounded-pill text-uppercase">{{title}}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
