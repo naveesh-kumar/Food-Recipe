@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
       if(avgratingupdate)
       avgratingupdate.forEach(async (item)=>{
         if(item._id == req.query.id){
-          const average = parseFloat(item.avgrating);
+          const average = parseFloat(item.avgrating.toFixed(1));
           const finalAverageUpdate = await Recipie.findOneAndUpdate(
             { _id: req.query.id },
             { $set: { 'avgrating': average } },

@@ -5,7 +5,7 @@
       <!-- Post Content Column -->
       <div class="col-lg-8">
         <!-- Title -->
-        <h1 class="mt-4">{{recipie.recipie}} <span class="badge badge-secondary">{{recipie.category}}</span></h1>
+        <h1 class="mt-4" style="text-transform:capitalize">{{recipie.recipie}} <span class="badge badge-secondary">{{recipie.category}}</span></h1>
         <!-- Author -->
         <p class="lead">
           by
@@ -13,12 +13,32 @@
         </p>
         {{#if recipie.avgrating}}
         <div class="displayRating">
-          <div style="display:none; pointer-events:none" class="recipieRatings" >{{recipie.avgrating}}</div>
+          <div style="display:none; pointer-events:none" class="recipieRatings" >{{recipie.avgrating}} </div>
           <div class="star-outer">
             <div class="star-inner">
             </div>
           </div>
-          <span style="font-weight: 500;">({{recipie.avgrating}}/5)</span>
+          <span style="font-weight: 500;">({{recipie.avgrating}}/5) <a class="showrating"><i class="fa fa-caret-down" aria-hidden="true"></i></a></span><span class="divider"></span><span style="font-weight: 400; font-size:14px">{{recipie.ratings.length}} {{#equal recipie.ratings.length "1"}}Rating{{/equal}} {{#notequal recipie.ratings.length "1"}}Ratings{{/notequal}}</span>
+          {{#if recipie.recipieComment.length}}<span class="divider"></span><a href="#comment" style="font-weight: 400; font-size:14px; text-decoration:none; color:black">{{recipie.recipieComment.length}} {{#equal recipie.recipieComment.length "1"}}Review{{/equal}} {{#notequal recipie.recipieComment.length "1"}}Reviews{{/notequal}}</a>{{/if}}
+        </div>
+        <div class="ratingDetails" id="rating-details-box">
+          <p class="rating-header">{{recipie.ratings.length}} {{#equal recipie.ratings.length "1"}}Rating{{/equal}} {{#notequal recipie.ratings.length "1"}}Ratings{{/notequal}}</p>
+          <p class= "total-rating" style="display: none;">{{recipie.ratings.length}}</p>
+          <div style="text-align:center">
+            <span class="rating-number">5</span><span class="rating-star"><i class="fa fa-star" aria-hidden="true"></i></span><span  class="rating-bar-wrapper"><span class="rating-progress progress5" ></span></span><span class="rating-count star5">{{ratingCount.fivestar}}</span>
+          </div>
+          <div style="text-align:center">
+            <span class="rating-number">4</span><span class="rating-star"><i class="fa fa-star" aria-hidden="true"></i></span><span  class="rating-bar-wrapper"><span class="rating-progress progress4"></span></span><span class="rating-count star4">{{ratingCount.fourstar}}</span>
+          </div>
+          <div style="text-align:center">
+            <span class="rating-number">3</span><span class="rating-star"><i class="fa fa-star" aria-hidden="true"></i></span><span  class="rating-bar-wrapper"><span class="rating-progress progress3"></span></span><span class="rating-count star3">{{ratingCount.threestar}}</span>
+          </div>
+          <div style="text-align:center">
+            <span class="rating-number">2</span><span class="rating-star"><i class="fa fa-star" aria-hidden="true"></i></span><span  class="rating-bar-wrapper"><span class="rating-progress progress2"></span></span><span class="rating-count star2">{{ratingCount.twostar}}</span>
+          </div>
+          <div style="text-align:center">
+            <span class="rating-number">1</span><span class="rating-star"><i class="fa fa-star" aria-hidden="true"></i></span><span  class="rating-bar-wrapper"><span class="rating-progress progress1"></span></span><span class="rating-count star1">{{ratingCount.onestar}}</span>
+          </div>
         </div>
         {{/if}}
         <hr>
@@ -29,7 +49,7 @@
         <img class="img-fluid rounded img-responsive" src="data:image/jpeg;base64, {{recipie.recipieImage}}" alt="">
         <hr>
         <!-- Post Content -->
-        <h2 class="mt-2 mb-2">How to Make {{recipie.recipie}}?</h2>
+        <h2 class="mt-2 mb-2">How to Make <span style="text-transform:capitalize">{{recipie.recipie}}?</span></h2>
         <ol>
           {{#each recipie.procedure.[0]}}
             <li class="lead">{{this}}</li>
@@ -64,7 +84,7 @@
         {{!-- {{#if recipe.recipieComment}} --}}
         {{#each recipie.recipieComment}}
         <!-- Single Comment -->
-        <div class="media mb-4">
+        <div class="media mb-4 reviews" id="comment" name="reviews">
           <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
           <div class="media-body">
             <h5 class="mt-0 text-capitalize">{{this.commentedBy}} <span class="pull-right" style="font-size:16px">{{this.commentedAt}}</span></h5>
@@ -135,6 +155,15 @@ var ratingDisplayEle = document.querySelector(".rating-display");
 var ratingele = document.querySelector(".ratingcount");
 var recipieIdEle = document.querySelector(".recipieId");
 var ratingtoshowele = document.querySelector(".recipieRatings");
+
+var totalRating = document.querySelector(".total-rating").textContent;
+
+window.addEventListener("load", function(){
+  for(var i=1; i<=5; i++){
+    document.querySelector(`.progress${i}`).style.width = (parseInt(document.querySelector(`.star${i}`).textContent)/parseInt(totalRating))*100 +"%";
+
+  }
+})
 
 //add event listener
 function clickStar(ele){
@@ -208,6 +237,15 @@ document.addEventListener("DOMContentLoaded", function(){
   //round the rating to nearest 10 and assign to width of inner star
   document.querySelector(".star-inner").style.width = `${Math.round((ratingPercentage*10)/10)}%`;
 })
+
+//show rating box
+var caret = document.querySelector(".showrating");
+var displayBox = document.querySelector(".ratingDetails");
+
+caret.addEventListener("click", function(){
+  displayBox.classList.toggle("display-box");
+})
+
 
 
 </script>

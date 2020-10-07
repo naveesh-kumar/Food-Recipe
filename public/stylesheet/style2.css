@@ -5,8 +5,12 @@
 
 .navbar-light .navbar-nav .active>.nav-link, .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .show>.nav-link {
     color: #ff0081;
+    
 }
 
+.myHeader{
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.15);
+}
 .navbar-light .navbar-brand {
     color: #ff0081;
 }
@@ -289,6 +293,14 @@ section::before{
     transform: scaleX(1.5);
 }
 
+.divider{
+    display: inline-block;
+    height: 24px;
+    width: 1px;
+    background: rgba(0,0,0,0.15);
+    margin: -8px 16px;
+}
+
 .myCardgroup{     
     width:100%;     
     display:grid;     
@@ -386,7 +398,7 @@ section::before{
 .mycard .recipie-rating{
     position: absolute;
     height:30px;
-    background: #F1C40F ;
+    background: #F1C40F;
     color:#fff;
     top:-30px;
     right:0;
@@ -598,7 +610,7 @@ section::before{
     content:"\f005 \f005 \f005 \f005 \f005";
     font-family: "fontawesome";
     font-weight: 900;
-    color:yellow;
+    color:#ff7e1a;
 }
 
 
@@ -707,6 +719,62 @@ section::before{
     height: fit-content;
     overflow: auto;
     resize: none;
+}
+
+.ratingDetails{
+    width:200px;
+    background-color: #fff;
+    padding:5px;
+    position: absolute;
+    visibility: hidden;
+    user-select: none;
+    box-shadow: 1px 2px 5px  rgba(0,0,0,0.2);
+}
+
+.ratingDetails .rating-header{
+    text-align: center;
+    margin-bottom: 0;
+    font-size:14px;
+}
+#rating-details-box.display-box{
+    visibility: visible;
+    user-select: all;
+    z-index:10;
+}
+.ratingDetails .rating-bar-wrapper{
+    width:100px;
+    height:10px;
+    background-color: lightgrey;
+    display: inline-block;
+    position: relative;
+}
+
+.ratingDetails .rating-progress{
+    position: absolute;
+    top:0;
+    left:0;
+    width:0;
+    height: 10px;
+    background-color: gray;
+}
+
+.ratingDetails .rating-number, .rating-star, .rating-count{
+    padding-right:10px;
+    font-weight: 500;
+    font-size:14px;
+}
+
+.ratingDetails .rating-number, .rating-count{
+    padding-left: 10px;
+}
+
+.rating-star{
+    color:#ff7e1a;
+}
+
+.showrating{
+    color: gray;
+    cursor: pointer;
 }
 
 @media (max-width:500px){

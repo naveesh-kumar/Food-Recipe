@@ -11,12 +11,12 @@
                     {{#each results.recipies}}
                     <div class="card mb-3" style="max-width: 540px; height:fit-content;">
                         <div class="row no-gutters">
-                            <div class="col-md-4" style="height:250px;">
+                            <div class="col-md-4" style="height:275px;">
                                 <img src="data:image/jpeg;base64, {{this.recipieImage}}" class="card-img" alt="..."
                                     style="width:100%; height:100%; object-fit:cover">
                             </div>
                             <div class="col-md-8">
-                                <div class="card-body" style="overflow:hidden">
+                                <div class="card-body" style="overflow:hidden; vertical-align:middle; height:100%">
                                     <h5 class="card-title" style="font-weight: 600;">{{this.recipie}}</h5>
                                     <p class="card-text" style="margin:0;">{{this.description}}</p>
                                     <p class="card-text"><small class="text-muted">Posted on
@@ -24,7 +24,7 @@
                                     <a class="btn btn-warning btn-sm edit" data-toggle="modal" data-recipe-id="{{this._id}}"
                                         data-target="#staticBackdrop">Edit</a>
                                     <a href="/recipie?id={{this._id}}" class="btn btn-info btn-sm">View</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="" class="btn btn-danger btn-sm">Delete</a>
                                 </div>
                             </div>
                         </div>
